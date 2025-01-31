@@ -1,0 +1,134 @@
+/* General Styling */
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #fff5f7; /* Soft pink background */
+    color: #5a2a2a; /* Deep reddish-brown for readability */
+}
+
+/* Navigation Bar */
+nav {
+    background-color: #b71c1c; /* Deep red */
+    color: white;
+    padding: 12px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 4px solid #8e0e0e; /* Darker red accent */
+}
+
+nav a {
+    color: #ffdada; /* Soft pink */
+    text-decoration: none;
+    margin-left: 15px;
+    font-weight: 500;
+    transition: 0.3s ease;
+}
+
+nav a:hover {
+    color: white;
+}
+
+/* Table Styling */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0px 4px 8px rgba(183, 28, 28, 0.2);
+}
+
+th, td {
+    padding: 14px 18px;
+    text-align: left;
+}
+
+th {
+    background-color: #e57373; /* Warm soft red */
+    color: white;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+td {
+    border-bottom: 1px solid #f8c1c1; /* Light red border */
+}
+
+/* Alternating Row Colors */
+tr:nth-child(even) {
+    background-color: #ffe6e6; /* Lightest pink */
+}
+
+/* Performance Badge Styling */
+td:last-child {
+    font-weight: bold;
+    text-align: center;
+    border-radius: 5px;
+    padding: 8px;
+}
+
+/* Mood & Performance Indicators */
+td:contains("Neutral") {
+    color: #b71c1c; /* Dark red */
+    font-weight: bold;
+}
+
+td:contains("Irritable") {
+    color: #ff4081; /* Bright pink */
+    font-weight: bold;
+}
+
+td:contains("Mild") {
+    color: #c2185b; /* Deep pink */
+    font-weight: bold;
+}
+
+td:contains("Moderate") {
+    color: #880e4f; /* Plum color */
+    font-weight: bold;
+}
+
+td:last-child:contains("4/5"),
+td:last-child:contains("5/5") {
+    color: green;
+}
+
+td:last-child:contains("3/5") {
+    color: orange;
+}
+
+td:last-child:contains("1/5"),
+td:last-child:contains("2/5") {
+    color: red;
+}
+
+td:last-child:contains("None/5") {
+    color: gray;
+}
+
+/* Header Styling */
+h1, h2 {
+    color: #b71c1c; /* Strong deep red */
+    font-size: 26px;
+}
+
+/* Rounded Borders for Better Aesthetic */
+td, th {
+    border-radius: 5px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    table {
+        font-size: 14px;
+    }
+
+    nav {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    nav a {
+        margin: 5px 0;
+    }
+}

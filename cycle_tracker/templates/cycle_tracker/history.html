@@ -1,0 +1,35 @@
+{% extends 'cycle_tracker/base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Tracking History</h2>
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead class="table-danger">
+                <tr>
+                    <th>Date</th>
+                    <th>Cycle Length</th>
+                    <th>Last Period</th>
+                    <th>Cramps</th>
+                    <th>Mood</th>
+                    <th>Trained</th>
+                    <th>Performance</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for entry in entries %}
+                <tr>
+                    <td>{{ entry.tracking_date|date }}</td>
+                    <td>{{ entry.cycle_length }} days</td>
+                    <td>{{ entry.last_period_date|date }}</td>
+                    <td>{{ entry.get_cramps_display }}</td>
+                    <td>{{ entry.get_mood_display }}</td>
+                    <td>{{ entry.did_train|yesno }}</td>
+                    <td>{{ entry.performance_rating }}/5</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
