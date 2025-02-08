@@ -46,7 +46,8 @@
 
         .btn-primary {
             background-color: #ff758c;
-            border-col}
+            border-color:#d0a9b5;
+        }
 
         .btn-primary:hover {
             background-color: #ff5c75;
@@ -67,18 +68,23 @@
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg">
         <div class="container">
-            <a class="navbar-branor: #ff758c;
-        d" href="{% url 'cycle_tracker:track' %}">Cycle Tracker</a>
+            <!-- Navbar brand (uncomment if needed) -->
+            <!-- <a class="navbar-brand" href="{% url 'cycle_tracker:track' %}">Cycle Tracker</a> -->
+            
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
+    
+            <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+                <ul class="navbar-nav mx-auto">
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'cycle_tracker:track' %}">Track New Entry</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'cycle_tracker:history' %}">View History</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'cycle_tracker:athletes' %}">Track New Athlete</a>
                     </li>
                 </ul>
             </div>
