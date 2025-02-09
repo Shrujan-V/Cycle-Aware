@@ -7,4 +7,7 @@ urlpatterns = [
     path('track/', views.track_cycle, name='track'),
     path('history/', views.HistoryView.as_view(), name='history'),
     path('athlete/',views.track_athlete, name='athletes'),
+    path('predict/', views.predict_and_store, name='predict_and_store'),
+    
 ]
+

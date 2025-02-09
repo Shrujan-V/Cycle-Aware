@@ -1,0 +1,26 @@
+{% extends 'cycle_tracker/base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Login</h2>
+    <div class="card p-4">
+        <form method="post">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="username" class="form-label">Username</label>
+                <input type="text" name="username" id="username" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" name="password" id="password" class="form-control" required>
+            </div>
+            {% if form.errors %}
+            <div class="alert alert-danger">
+                <strong>Invalid username or password.</strong>
+            </div>
+            {% endif %}
+            <button type="submit" class="btn btn-primary">Login</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,27 @@
+{% extends 'cycle_tracker/base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Prediction Result</h2>
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">Athlete Data</h5>
+            <p><strong>Tracking Date:</strong> {{ athlete.tracking_date }}</p>
+            <p><strong>Duration:</strong> {{ athlete.durata }} minutes</p>
+            <p><strong>Total Distance:</strong> {{ athlete.distot }} meters</p>
+            <p><strong>High-Speed Running:</strong> {{ athlete.hsr }} meters</p>
+            <p><strong>Accelerations:</strong> {{ athlete.acc }}</p>
+            <p><strong>Decelerations:</strong> {{ athlete.dec }}</p>
+            <p><strong>RPE:</strong> {{ athlete.rpe }}</p>
+            <p><strong>Session RPE:</strong> {{ athlete.srpe }}</p>
+            <hr>
+            <h4 class="text-primary">Predicted Phase: {{ phase_prediction }} - {{ phase_name }}</h4>
+            <p class="text-muted"><strong>Here's something for you!</strong></p>
+            <blockquote class="blockquote">
+                <p>{{ phase_message|linebreaks }}</p>
+            </blockquote>
+        </div>
+    </div>
+    <a href="{% url 'cycle_tracker:athletes' %}" class="btn btn-primary mt-3">Track Another Athlete</a>
+</div>
+{% endblock %}

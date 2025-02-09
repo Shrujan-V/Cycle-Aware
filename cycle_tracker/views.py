@@ -1,8 +1,13 @@
 from django.shortcuts import render, redirect
+from django.http import JsonResponse
 from django.views.generic import ListView
-from .forms import CycleTrackerForm
-from .models import CycleTracker, Athlete  # Ensure Athlete model exists
-from datetime import datetime
+from .forms import CycleTrackerForm, AthleteTrackerForm
+from .models import CycleTracker, Athlete
+from .ml_model import predict_phase  # Import ML function
+import json
+import numpy as np
+
+# Cycle Tracking View
 
 def track_cycle(request):
     if request.method == 'POST':
@@ -29,6 +34,7 @@ def track_cycle(request):
     return render(request, 'cycle_tracker/track_form.html', {'form': form})
 
 
+# History View
 class HistoryView(ListView):
     model = CycleTracker
     template_name = 'cycle_tracker/history.html'
@@ -36,17 +42,94 @@ class HistoryView(ListView):
     ordering = ['-tracking_date']
 
 
-from django.shortcuts import render, redirect
+# Athlete Tracking View
+from django.shortcuts import render
 from .forms import AthleteTrackerForm
 from .models import Athlete
+from .ml_model import predict_phase  # Import ML function
+
+from django.shortcuts import render
+from .forms import AthleteTrackerForm
+from .models import Athlete
+from .ml_model import predict_phase  # Import ML function
+
+# Define phase names and messages
+PHASE_MESSAGES = {
+    1: ("Menstrual", "Every champion knows that recovery is part of the process.\nTrust your body, honor the rest, and come back fiercer!"),
+    2: ("Follicular", "You are limitless! Fresh energy, fresh focus—channel it into every move you make!"),
+    3: ("Ovulation", "This is your moment—your strength, speed, and power are at their peak. Own it!"),
+    4: ("Luteal", "Tough days build tougher athletes. Focus, breathe, and push through—you’ve got this!")
+}
 
 def track_athlete(request):
     if request.method == 'POST':
         form = AthleteTrackerForm(request.POST)
         if form.is_valid():
-            form.save()
-            
+            athlete = form.save(commit=False)
+
+            # Prepare feature list for ML model
+            features = [
+                athlete.durata, athlete.distot, athlete.hsr,
+                athlete.acc, athlete.dec, athlete.rpe, athlete.srpe
+            ]
+            athlete.phase_prediction = int(predict_phase(features))  # ML Prediction
+            athlete.save()
+
+            # Get the phase name and message
+            phase_name, phase_message = PHASE_MESSAGES.get(athlete.phase_prediction, ("Unknown", "No message available."))
+
+            # Render the result in an HTML page
+            return render(request, 'cycle_tracker/prediction_result.html', {
+                'athlete': athlete,
+                'phase_prediction': athlete.phase_prediction,
+                'phase_name': phase_name,
+                'phase_message': phase_message
+            })
+
     else:
         form = AthleteTrackerForm()
-    
+
     return render(request, 'cycle_tracker/track_athlete.html', {'form': form})
+
+
+
+from django.shortcuts import render
+import json
+import numpy as np
+from django.http import JsonResponse
+from .models import Athlete
+from .ml_model import predict_phase  # Ensure ML function is imported
+
+class NpEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, np.integer):
+            return int(obj)
+        if isinstance(obj, np.floating):
+            return float(obj)
+        if isinstance(obj, np.ndarray):
+            return obj.tolist()
+        return super(NpEncoder, self).default(obj)
+
+
+def predict_and_store(request):
+    if request.method == 'POST':
+        try:
+            # Check if request has JSON data
+            if request.content_type == 'application/json':
+                data = json.loads(request.body)
+            else:
+                data = request.POST.dict()  # Convert form data to dictionary
+
+            # Convert NumPy types to Python native types
+            cleaned_data = {key: int(value) if isinstance(value, np.integer) else value for key, value in data.items()}
+
+            # Save the athlete entry
+            athlete = Athlete.objects.create(**cleaned_data)
+
+            return render(request, 'cycle_tracker/prediction_result.html', {
+                'athlete': athlete,
+                'phase_prediction': athlete.phase_prediction
+            })
+
+        except Exception as e:
+            return render(request, 'cycle_tracker/error.html', {'error_message': str(e)})
