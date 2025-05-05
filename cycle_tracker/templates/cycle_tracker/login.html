@@ -14,9 +14,9 @@
                 <label for="password" class="form-label">Password</label>
                 <input type="password" name="password" id="password" class="form-control" required>
             </div>
-            {% if form.errors %}
+            {% if error_message %}
             <div class="alert alert-danger">
-                <strong>Invalid username or password.</strong>
+                <strong>{{ error_message }}</strong>
             </div>
             {% endif %}
             <button type="submit" class="btn btn-primary">Login</button>

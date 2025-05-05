@@ -6,6 +6,8 @@ from .models import CycleTracker, Athlete
 from .ml_model import predict_phase  # Import ML function
 import json
 import numpy as np
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
 
 # Cycle Tracking View
 
@@ -34,7 +36,30 @@ def track_cycle(request):
     return render(request, 'cycle_tracker/track_form.html', {'form': form})
 
 
-# History View
+from django.contrib.auth import authenticate, login
+from django.shortcuts import render, redirect
+from django.contrib.auth.forms import AuthenticationForm
+
+# Define a custom login view (if you want to avoid using Django's default LoginView)
+def custom_login(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        
+        # Authenticate the user
+        
+        if username=="Shreya" and password=="Shreya":
+            # Log the user in
+            return redirect('cycle_tracker:track')  # Redirect to a page after login (e.g., home or track)
+        else:
+            # Invalid login credentials
+            return render(request, 'cycle_tracker/login.html', {
+                'error_message': 'Invalid username or password.',
+            })
+    else:
+        return render(request, 'cycle_tracker/login.html')
+
+
 class HistoryView(ListView):
     model = CycleTracker
     template_name = 'cycle_tracker/history.html'
@@ -60,6 +85,7 @@ PHASE_MESSAGES = {
     3: ("Ovulation", "This is your moment—your strength, speed, and power are at their peak. Own it!"),
     4: ("Luteal", "Tough days build tougher athletes. Focus, breathe, and push through—you’ve got this!")
 }
+
 
 def track_athlete(request):
     if request.method == 'POST':
